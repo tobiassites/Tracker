@@ -1,0 +1,405 @@
+{
+ "updated": "2026-11-26T20:58:53.707Z",
+ "games": [
+  {
+   "d": "2026-11-26",
+   "sport": "American football",
+   "lg": "NFL",
+   "t": "18:00",
+   "h": "Detroit Lions",
+   "a": "Chicago Bears"
+  },
+  {
+   "d": "2026-11-26",
+   "sport": "American football",
+   "lg": "NFL",
+   "t": "21:30",
+   "h": "Dallas Cowboys",
+   "a": "Philadelphia Eagles"
+  },
+  {
+   "d": "2026-11-26",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "20:00",
+   "h": "Alabama State Hornets",
+   "a": "Tuskegee Golden Tigers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Football",
+   "lg": "Premier League",
+   "t": "20:00",
+   "h": "Nottingham Forest",
+   "a": "Chelsea"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Football",
+   "lg": "La Liga",
+   "t": "20:00",
+   "h": "Levante",
+   "a": "Racing Santander"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Football",
+   "lg": "Serie A",
+   "t": "19:45",
+   "h": "Venezia",
+   "a": "Bologna"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Football",
+   "lg": "Bundesliga",
+   "t": "19:30",
+   "h": "Werder Bremen",
+   "a": "Borussia Mönchengladbach"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Football",
+   "lg": "Ligue 1",
+   "t": "19:45",
+   "h": "Stade Brest",
+   "a": "Paris FC"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NFL",
+   "t": "01:20",
+   "h": "Buffalo Bills",
+   "a": "Kansas City Chiefs"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NFL",
+   "t": "20:00",
+   "h": "Pittsburgh Steelers",
+   "a": "Denver Broncos"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "01:00",
+   "h": "Texas Tech Red Raiders",
+   "a": "TCU Horned Frogs"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "17:00",
+   "h": "Akron Zips",
+   "a": "Buffalo Bulls"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "17:00",
+   "h": "Ole Miss Rebels",
+   "a": "Mississippi State Bulldogs"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "17:00",
+   "h": "UTSA Roadrunners",
+   "a": "Tulsa Golden Hurricane"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "17:00",
+   "h": "Iowa Hawkeyes",
+   "a": "Nebraska Cornhuskers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "17:00",
+   "h": "Ohio Bobcats",
+   "a": "Toledo Rockets"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "20:00",
+   "h": "South Alabama Jaguars",
+   "a": "Appalachian State Mountaineers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "20:30",
+   "h": "Florida State Seminoles",
+   "a": "Florida Gators"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "20:30",
+   "h": "San Jose State Spartans",
+   "a": "North Dakota State Bison"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "20:30",
+   "h": "Memphis Tigers",
+   "a": "Temple Owls"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "21:30",
+   "h": "New Mexico Lobos",
+   "a": "Air Force Falcons"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "Sat 00:30",
+   "h": "Texas A&M Aggies",
+   "a": "Texas Longhorns"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "Sat 00:30",
+   "h": "Wisconsin Badgers",
+   "a": "Minnesota Golden Gophers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "American football",
+   "lg": "NCAA (College football)",
+   "t": "Sat 02:00",
+   "h": "Utah Utes",
+   "a": "West Virginia Mountaineers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 00:00",
+   "h": "New York Knicks",
+   "a": "Miami Heat"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 00:30",
+   "h": "Detroit Pistons",
+   "a": "Milwaukee Bucks"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 00:30",
+   "h": "Toronto Raptors",
+   "a": "Brooklyn Nets"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 00:30",
+   "h": "Indiana Pacers",
+   "a": "Philadelphia 76ers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 01:00",
+   "h": "Boston Celtics",
+   "a": "Atlanta Hawks"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 01:30",
+   "h": "Minnesota Timberwolves",
+   "a": "Memphis Grizzlies"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 02:00",
+   "h": "Phoenix Suns",
+   "a": "Dallas Mavericks"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 02:30",
+   "h": "Utah Jazz",
+   "a": "Denver Nuggets"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 02:30",
+   "h": "San Antonio Spurs",
+   "a": "Los Angeles Lakers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 02:30",
+   "h": "LA Clippers",
+   "a": "New Orleans Pelicans"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Basketball",
+   "lg": "NBA",
+   "t": "Sat 02:30",
+   "h": "Portland Trail Blazers",
+   "a": "Golden State Warriors"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "18:00",
+   "h": "Boston Bruins",
+   "a": "Toronto Maple Leafs"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "18:00",
+   "h": "New Jersey Devils",
+   "a": "Calgary Flames"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "18:00",
+   "h": "Nashville Predators",
+   "a": "Utah Mammoth"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "19:00",
+   "h": "St. Louis Blues",
+   "a": "Dallas Stars"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "20:00",
+   "h": "Columbus Blue Jackets",
+   "a": "Detroit Red Wings"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "20:00",
+   "h": "Philadelphia Flyers",
+   "a": "Vancouver Canucks"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "20:00",
+   "h": "Washington Capitals",
+   "a": "Florida Panthers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "20:00",
+   "h": "Tampa Bay Lightning",
+   "a": "Ottawa Senators"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "21:00",
+   "h": "Minnesota Wild",
+   "a": "Colorado Avalanche"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "21:00",
+   "h": "San Jose Sharks",
+   "a": "Vegas Golden Knights"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "21:00",
+   "h": "Anaheim Ducks",
+   "a": "Los Angeles Kings"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "22:30",
+   "h": "Chicago Blackhawks",
+   "a": "New York Rangers"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "Sat 00:30",
+   "h": "New York Islanders",
+   "a": "Winnipeg Jets"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "Sat 01:00",
+   "h": "Buffalo Sabres",
+   "a": "Pittsburgh Penguins"
+  },
+  {
+   "d": "2026-11-27",
+   "sport": "Ice hockey",
+   "lg": "NHL",
+   "t": "Sat 01:00",
+   "h": "Edmonton Oilers",
+   "a": "Seattle Kraken"
+  }
+ ]
+}

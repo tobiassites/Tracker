@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bet Ledger</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎟️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#dfe6ea; --slip:#fbfaf6; --ink:#1b2a3a; --muted:#6a7885; --line:#c9d1d6;
+  --win:#13795b; --loss:#c0392b; --pend:#b7791f; --accent:#1b2a3a; --accent-ink:#fbfaf6;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#10171d; --slip:#1a242d; --ink:#e8edf0; --muted:#8a99a6; --line:#2c3a46;
+  --win:#3ecf9e; --loss:#ff7b6b; --pend:#e8b84a; --accent:#e8edf0; --accent-ink:#10171d; color-scheme:dark;}
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding:24px 16px 64px}
+h1,h2,.big{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:20px}
+header{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:12px}
+h1{margin:0;font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+.slip{background:var(--slip);border-radius:6px;padding:22px;position:relative;
+  -webkit-mask:radial-gradient(circle 7px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+  mask:radial-gradient(circle 7px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 7px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+.slip h2{margin:0 0 14px;font-size:1.15rem;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:18px 12px}
+.stat span{display:block;color:var(--muted);font-size:.82rem}
+.stat b{font:800 1.6rem/1.2 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em}
+.stat.main b{font-size:2.6rem}
+.pos{color:var(--win)}.neg{color:var(--loss)}
+#chart{width:100%;height:150px;display:block;margin-top:18px;border-top:1px dashed var(--line);padding-top:12px}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+label{display:grid;gap:4px;font-size:.82rem;color:var(--muted)}
+input,select,button{font:inherit;color:var(--ink)}
+input,select{background:transparent;border:1px solid var(--line);border-radius:4px;padding:8px 10px;min-width:0;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button{cursor:pointer;border:1px solid var(--line);background:transparent;border-radius:4px;padding:8px 14px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:500;align-self:end}
+.wide{grid-column:1/-1}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.bar .sp{flex:1}
+.bar button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th{text-align:left;font-weight:500;color:var(--muted);font-size:.8rem;padding:6px 8px;border-bottom:1px solid var(--ink);white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px dashed var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td small{color:var(--muted);display:block}
+td select{padding:4px 6px;width:auto}
+.st-won{color:var(--win)}.st-lost{color:var(--loss)}.st-pending{color:var(--pend)}.st-void{color:var(--muted)}
+.x{border:0;padding:4px 8px;color:var(--muted)}
+.empty{color:var(--muted);padding:18px 0;text-align:center}
+.note{font-size:.8rem;color:var(--muted);margin-top:10px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--ink)}
+.tabs button{border:0;border-radius:6px 6px 0 0;padding:10px 20px;font:600 1rem "Bricolage Grotesque",sans-serif;color:var(--muted);background:transparent}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.pane{display:grid;gap:20px}
+.gm{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.gm .tm{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.88rem}
+.gm button{padding:4px 10px;font-size:.85rem}
+.lg{font:600 1rem "Bricolage Grotesque",sans-serif;margin:18px 0 2px}
+.warn{background:color-mix(in srgb,var(--pend) 18%,transparent);border-left:3px solid var(--pend);padding:8px 12px;margin-bottom:12px;font-size:.9rem}
+.pane[hidden]{display:none}
+#dchart{width:100%;height:180px;display:block;margin-bottom:14px}
+tr.total td{border-top:1px solid var(--ink);border-bottom:0;font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Bet Ledger</h1>
+    <label style="grid-auto-flow:column;align-items:center;gap:8px">Currency
+      <input id="cur" value="£" maxlength="3" style="width:56px">
+    </label>
+  </header>
+
+  <section class="slip" aria-label="Summary">
+    <div class="stats" id="stats"></div>
+    <svg id="chart" role="img" aria-label="Cumulative profit chart"></svg>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t-ledger" aria-selected="true" data-tab="ledger">Ledger</button>
+    <button role="tab" id="t-games" aria-selected="false" data-tab="games">Games</button>
+    <button role="tab" id="t-daily" aria-selected="false" data-tab="daily">Daily P&amp;L</button>
+  </div>
+
+  <div class="pane" id="pane-ledger" role="tabpanel" aria-labelledby="t-ledger">
+  <section class="slip" aria-label="Add bet">
+    <h2>Add a bet</h2>
+    <form id="f">
+      <label>Date<input type="date" id="date" required></label>
+      <label>Sport<select id="sport" required></select></label>
+      <label>League<select id="league"></select></label>
+      <label id="othWrap" hidden>Other league<input id="leagueOther" placeholder="Type league"></label>
+      <label class="wide" style="grid-column:span 2">Event and pick<input id="pick" placeholder="Arsenal v Spurs: Arsenal to win" required></label>
+      <label>Odds format<select id="fmt"><option value="dec">Decimal (2.50)</option><option value="us">American (+150)</option><option value="frac">Fractional (3/2)</option></select></label>
+      <label>Odds<input id="odds" required placeholder="2.50"></label>
+      <label>Stake<input id="stake" type="number" step="0.01" min="0" required placeholder="10"></label>
+      <label>Bookmaker<input id="book" placeholder="Optional"></label>
+      <label>Status<select id="status"><option value="pending">Pending</option><option value="won">Won</option><option value="lost">Lost</option><option value="void">Void</option></select></label>
+      <button class="primary" type="submit">Add bet</button>
+    </form>
+    <div class="note" id="err" role="alert"></div>
+  </section>
+
+  <section class="slip" aria-label="Bets">
+    <div class="bar">
+      <button data-f="all" aria-pressed="true">All</button>
+      <button data-f="pending" aria-pressed="false">Pending</button>
+      <button data-f="won" aria-pressed="false">Won</button>
+      <button data-f="lost" aria-pressed="false">Lost</button>
+      <span class="sp"></span>
+      <button id="csv">Export CSV</button>
+      <button id="json">Backup</button>
+      <button id="imp">Restore</button>
+      <input type="file" id="file" accept=".json" hidden>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Date</th><th>Bet</th><th class="n">Odds</th><th class="n">Stake</th><th>Status</th><th class="n">Profit</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <div class="empty" id="empty" hidden>No bets yet. Add your first one above.</div>
+    <div class="note">Data is saved in this browser only. Use Backup to keep a copy or move it to another device.</div>
+  </section>
+  </div>
+
+  <div class="pane" id="pane-games" role="tabpanel" aria-labelledby="t-games" hidden>
+    <section class="slip" aria-label="Games">
+      <h2>Games</h2>
+      <div id="gwarn"></div>
+      <div class="bar"><span id="gdays" style="display:flex;gap:8px;flex-wrap:wrap"></span><span class="sp"></span>
+        <select id="gsport" aria-label="Filter by sport" style="width:auto"></select></div>
+      <div id="glist"></div>
+      <div class="empty" id="gempty" hidden>No games saved for this day.</div>
+      <div class="note" id="gnote"></div>
+    </section>
+  </div>
+
+  <div class="pane" id="pane-daily" role="tabpanel" aria-labelledby="t-daily" hidden>
+    <section class="slip" aria-label="Daily profit and loss">
+      <h2>Profit and loss by day</h2>
+      <svg id="dchart" role="img" aria-label="Daily profit and loss chart (last 30 days)"></svg>
+      <div class="tbl"><table>
+        <thead><tr><th>Date</th><th class="n">Bets</th><th class="n">W-L</th><th class="n">Staked</th><th class="n">Day P&amp;L</th><th class="n">Running total</th></tr></thead>
+        <tbody id="drows"></tbody>
+      </table></div>
+      <div class="empty" id="dempty" hidden>Settle a bet as Won or Lost to see daily results.</div>
+      <div class="note">Each bet counts on the date you entered for it. Pending and void bets are left out until they are Won or Lost. The chart shows the last 30 days with settled bets.</div>
+    </section>
+  </div>
+</div>
+
+<script>
+const KEY = "betLedger.v1";
+let bets = [], filter = "all", cur = "£";
+const $ = id => document.getElementById(id);
+
+try {
+  const d = JSON.parse(localStorage.getItem(KEY) || "{}");
+  bets = d.bets || []; cur = d.cur || "£";
+} catch (e) {}
+$("cur").value = cur;
+$("date").valueAsDate = new Date();
+
+const LEAGUES = {
+  "Football": ["Premier League","Championship","FA Cup","EFL Cup","La Liga","Copa del Rey","Serie A","Coppa Italia","Bundesliga","DFB-Pokal","Ligue 1","Eredivisie","Primeira Liga","Scottish Premiership","Champions League","Europa League","Conference League","World Cup","European Championship","Copa América","Nations League","International friendly","MLS","Liga MX","Brasileirão","Saudi Pro League","A-League"],
+  "Basketball": ["NBA","WNBA","NCAA","EuroLeague","EuroCup","NBL (Australia)","FIBA World Cup","Olympics"],
+  "American football": ["NFL","NCAA (College football)","CFL"],
+  "Baseball": ["MLB","NPB (Japan)","KBO (Korea)"],
+  "Ice hockey": ["NHL","AHL","KHL","SHL","IIHF World Championship"],
+  "Tennis": ["ATP Tour","WTA Tour","Australian Open","French Open","Wimbledon","US Open","ATP Masters 1000","ATP Finals","Davis Cup","Billie Jean King Cup"],
+  "Cricket": ["Test","ODI","T20 International","T20 World Cup","IPL","Big Bash","The Hundred","County Championship","SA20","PSL","CPL"],
+  "Rugby union": ["Six Nations","Rugby Championship","Premiership Rugby","United Rugby Championship","Top 14","Super Rugby","Champions Cup","Rugby World Cup"],
+  "Rugby league": ["NRL","Super League","State of Origin"],
+  "MMA": ["UFC","PFL","ONE Championship"],
+  "Boxing": ["World title fight","Boxing card"],
+  "Golf": ["PGA Tour","DP World Tour","LIV Golf","LPGA","The Masters","PGA Championship","US Open (golf)","The Open","Ryder Cup"],
+  "Motorsport": ["Formula 1","MotoGP","NASCAR","IndyCar","World Rally Championship"],
+  "Darts": ["PDC World Championship","Premier League Darts","World Matchplay","Grand Slam of Darts"],
+  "Snooker": ["World Championship","UK Championship","The Masters (snooker)"],
+  "Horse racing": ["Cheltenham Festival","Grand National","Royal Ascot","Kentucky Derby","Breeders' Cup","Other meeting"],
+  "Esports": ["Counter-Strike 2","League of Legends","Dota 2","Valorant"],
+  "Other": []
+};
+const OTHER = "Other…";
+$("sport").innerHTML = '<option value="" disabled selected>Choose sport</option>' + Object.keys(LEAGUES).map(k => `<option>${k}</option>`).join("");
+function fillLeagues() {
+  const list = LEAGUES[$("sport").value] || [];
+  $("league").innerHTML = '<option value="">Choose league</option>' + list.map(l => `<option>${l}</option>`).join("") + `<option>${OTHER}</option>`;
+  $("othWrap").hidden = true;
+}
+function getLeague() { const v = $("league").value; return v === OTHER ? $("leagueOther").value.trim() : v; }
+$("sport").addEventListener("change", fillLeagues);
+$("league").addEventListener("change", () => { $("othWrap").hidden = $("league").value !== OTHER; });
+fillLeagues();
+
+
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ bets, cur })); } catch (e) {} };
+const money = v => (v < 0 ? "-" : "") + cur + Math.abs(v).toFixed(2);
+const signed = v => (v > 0 ? "+" : "") + money(v);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function toDecimal(fmt, raw) {
+  raw = String(raw).trim();
+  if (fmt === "dec") { const d = parseFloat(raw); return d > 1 ? d : NaN; }
+  if (fmt === "us") { const a = parseFloat(raw); if (!a || Math.abs(a) < 100) return NaN; return a > 0 ? 1 + a / 100 : 1 + 100 / -a; }
+  const m = raw.match(/^(\d+(?:\.\d+)?)\s*[\/-]\s*(\d+(?:\.\d+)?)$/);
+  return m && +m[2] > 0 ? 1 + m[1] / m[2] : NaN;
+}
+const profit = b => b.status === "won" ? b.stake * (b.odds - 1) : b.status === "lost" ? -b.stake : 0;
+
+function render() {
+  const settled = bets.filter(b => b.status === "won" || b.status === "lost");
+  const staked = settled.reduce((s, b) => s + b.stake, 0);
+  const pl = bets.reduce((s, b) => s + profit(b), 0);
+  const won = settled.filter(b => b.status === "won").length;
+  const pending = bets.filter(b => b.status === "pending");
+  const pct = (a, b) => b ? (a / b * 100).toFixed(1) + "%" : "–";
+  const cls = pl > 0 ? "pos" : pl < 0 ? "neg" : "";
+  $("stats").innerHTML = `
+    <div class="stat main"><span>Profit / loss</span><b class="${cls}">${signed(pl)}</b></div>
+    <div class="stat"><span>ROI</span><b class="${cls}">${pct(pl, staked)}</b></div>
+    <div class="stat"><span>Win rate</span><b>${pct(won, settled.length)}</b></div>
+    <div class="stat"><span>Record (W-L)</span><b>${won}-${settled.length - won}</b></div>
+    <div class="stat"><span>Settled stakes</span><b>${money(staked)}</b></div>
+    <div class="stat"><span>Open (${pending.length})</span><b>${money(pending.reduce((s, b) => s + b.stake, 0))}</b></div>`;
+  drawChart();
+  drawDaily();
+
+  const list = bets.filter(b => filter === "all" || b.status === filter)
+    .sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+  $("empty").hidden = list.length > 0;
+  $("rows").innerHTML = list.map(b => {
+    const p = profit(b);
+    return `<tr>
+      <td>${esc(b.date)}</td>
+      <td>${esc(b.pick)}<small>${esc(b.sport)}${b.league ? " · " + esc(b.league) : ""}${b.book ? " · " + esc(b.book) : ""}</small></td>
+      <td class="n">${b.odds.toFixed(2)}</td>
+      <td class="n">${money(b.stake)}</td>
+      <td><select data-id="${b.id}" class="st-${b.status}" aria-label="Status">
+        ${["pending", "won", "lost", "void"].map(s => `<option value="${s}"${s === b.status ? " selected" : ""}>${s[0].toUpperCase() + s.slice(1)}</option>`).join("")}
+      </select></td>
+      <td class="n ${p > 0 ? "pos" : p < 0 ? "neg" : ""}">${b.status === "pending" ? "–" : signed(p)}</td>
+      <td><button class="x" data-del="${b.id}" aria-label="Delete bet">✕</button></td></tr>`;
+  }).join("");
+}
+
+function drawChart() {
+  const svg = $("chart");
+  const s = bets.filter(b => b.status === "won" || b.status === "lost").sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
+  if (s.length < 2) { svg.innerHTML = `<text x="0" y="40" fill="currentColor" opacity=".5" font-size="13">Settle two or more bets to see your profit curve.</text>`; svg.setAttribute("viewBox", "0 0 600 150"); return; }
+  let run = 0; const pts = [0, ...s.map(b => (run += profit(b)))];
+  const W = 600, H = 150, pad = 8, min = Math.min(...pts, 0), max = Math.max(...pts, 0), r = max - min || 1;
+  const x = i => pad + i * (W - 2 * pad) / (pts.length - 1), y = v => H - pad - (v - min) / r * (H - 2 * pad);
+  const d = pts.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
+  const col = run >= 0 ? "var(--win)" : "var(--loss)";
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "none");
+  svg.innerHTML = `<line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-dasharray="4 4"/>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+}
+
+function drawDaily() {
+  const days = {};
+  bets.filter(b => b.status === "won" || b.status === "lost").forEach(b => {
+    const d = days[b.date] || (days[b.date] = { date: b.date, n: 0, w: 0, staked: 0, pl: 0 });
+    d.n++; d.staked += b.stake; d.pl += profit(b); if (b.status === "won") d.w++;
+  });
+  const list = Object.values(days).sort((a, b) => a.date.localeCompare(b.date));
+  let run = 0; list.forEach(d => { run += d.pl; d.run = run; });
+  $("dempty").hidden = list.length > 0;
+
+  const tot = list.reduce((t, d) => (t.n += d.n, t.w += d.w, t.staked += d.staked, t.pl += d.pl, t), { n: 0, w: 0, staked: 0, pl: 0 });
+  const c = v => v > 0 ? "pos" : v < 0 ? "neg" : "";
+  $("drows").innerHTML = list.slice().reverse().map(d => `<tr>
+    <td>${esc(d.date)}</td><td class="n">${d.n}</td><td class="n">${d.w}-${d.n - d.w}</td>
+    <td class="n">${money(d.staked)}</td><td class="n ${c(d.pl)}">${signed(d.pl)}</td><td class="n ${c(d.run)}">${signed(d.run)}</td></tr>`).join("")
+    + (list.length ? `<tr class="total"><td>Total</td><td class="n">${tot.n}</td><td class="n">${tot.w}-${tot.n - tot.w}</td>
+      <td class="n">${money(tot.staked)}</td><td class="n ${c(tot.pl)}">${signed(tot.pl)}</td><td></td></tr>` : "");
+
+  const svg = $("dchart"), W = 600, H = 180, pad = 8;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "none");
+  const last = list.slice(-30);
+  if (!last.length) { svg.innerHTML = ""; return; }
+  const max = Math.max(...last.map(d => Math.abs(d.pl)), 1), mid = H / 2, slot = (W - 2 * pad) / last.length, bw = Math.min(slot * 0.7, 40);
+  svg.innerHTML = `<line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="var(--line)"/>` + last.map((d, i) => {
+    const h = Math.max(Math.abs(d.pl) / max * (mid - pad), 1.5), x = pad + i * slot + (slot - bw) / 2;
+    return `<rect x="${x.toFixed(1)}" y="${(d.pl >= 0 ? mid - h : mid).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${d.pl >= 0 ? "var(--win)" : "var(--loss)"}"><title>${d.date}: ${signed(d.pl)}</title></rect>`;
+  }).join("");
+}
+
+function showTab(name) {
+  document.querySelectorAll("[data-tab]").forEach(x => {
+    x.setAttribute("aria-selected", x.dataset.tab === name);
+    $("pane-" + x.dataset.tab).hidden = x.dataset.tab !== name;
+  });
+}
+document.querySelectorAll("[data-tab]").forEach(t => t.addEventListener("click", () => showTab(t.dataset.tab)));
+
+// ---- Games tab: loads fixtures.json (refreshed daily by GitHub Actions). Times are UK time. ----
+const USFMT = new Set(["American football", "Basketball", "Ice hockey", "Baseball"]);
+let GAMES = [], fixturesUpdated = null, fixturesError = "";
+let gDay = null, gSport = "all", shown = [];
+const isoLocal = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const fmtDay = (iso, long) => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { weekday: long ? "long" : "short", day: "numeric", month: long ? "long" : "short" });
+function dayLabel(iso) {
+  const t = new Date(), tm = new Date(t.getTime() + 864e5);
+  return iso === isoLocal(t) ? "Today" : iso === isoLocal(tm) ? "Tomorrow" : fmtDay(iso);
+}
+function renderGames() {
+  const days = [...new Set(GAMES.map(g => g.d))].sort();
+  if (!days.length) {
+    ["gdays", "gsport", "glist", "gwarn"].forEach(i => $(i).innerHTML = "");
+    $("gempty").hidden = false; $("gempty").textContent = fixturesError || "No games found for the next two days."; $("gnote").textContent = "";
+    return;
+  }
+  $("gempty").textContent = "No games for this day.";
+  if (!gDay || !days.includes(gDay)) gDay = days.includes(isoLocal(new Date())) ? isoLocal(new Date()) : days[0];
+  $("gdays").innerHTML = days.map(d => `<button data-day="${d}" aria-pressed="${d === gDay}">${dayLabel(d)} <small>${fmtDay(d)}</small></button>`).join("");
+  const sports = [...new Set(GAMES.filter(g => g.d === gDay).map(g => g.sport))];
+  if (gSport !== "all" && !sports.includes(gSport)) gSport = "all";
+  $("gsport").innerHTML = '<option value="all">All sports</option>' + sports.map(x => `<option${x === gSport ? " selected" : ""}>${x}</option>`).join("");
+  shown = GAMES.filter(g => g.d === gDay && (gSport === "all" || g.sport === gSport));
+  let html = "", last = "";
+  shown.forEach((g, i) => {
+    if (g.lg !== last) { html += `<div class="lg">${esc(g.lg)}</div>`; last = g.lg; }
+    html += `<div class="gm"><span class="tm">${g.t}</span><span>${esc(g.name)}</span><button data-i="${i}">Track bet</button></div>`;
+  });
+  $("glist").innerHTML = html;
+  $("gempty").hidden = shown.length > 0;
+  const age = fixturesUpdated ? Date.now() - Date.parse(fixturesUpdated) : Infinity;
+  $("gwarn").innerHTML = age > 36 * 36e5 ? '<div class="warn">These fixtures are more than a day old, so the daily update may have stopped. Check the Actions tab in your GitHub repo.</div>' : "";
+  $("gnote").textContent = `Updated ${new Date(fixturesUpdated).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}. Times are UK time. A weekday before a time (like Sat 00:30) means the game starts after midnight UK time. Tap Track bet to fill in the form.`;
+}
+$("gdays").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (b) { gDay = b.dataset.day; renderGames(); } });
+$("gsport").addEventListener("change", e => { gSport = e.target.value; renderGames(); });
+$("glist").addEventListener("click", e => {
+  const b = e.target.closest("[data-i]"); if (!b) return;
+  const g = shown[+b.dataset.i];
+  $("sport").value = g.sport; fillLeagues();
+  $("league").value = [...$("league").options].some(o => o.value === g.lg) ? g.lg : "";
+  $("date").value = g.d;
+  $("pick").value = g.name + ": ";
+  showTab("ledger");
+  $("pick").focus(); $("pick").setSelectionRange($("pick").value.length, $("pick").value.length);
+  $("pick").scrollIntoView({ block: "center", behavior: "smooth" });
+});
+
+$("f").addEventListener("submit", e => {
+  e.preventDefault();
+  const odds = toDecimal($("fmt").value, $("odds").value);
+  if (isNaN(odds)) { $("err").textContent = "Odds not recognised. Check the format matches the Odds format selector."; return; }
+  $("err").textContent = "";
+  bets.push({ id: Date.now(), date: $("date").value, sport: $("sport").value, league: getLeague(), pick: $("pick").value.trim(),
+    odds, stake: parseFloat($("stake").value), book: $("book").value.trim(), status: $("status").value });
+  save(); render();
+  ["pick", "odds", "book"].forEach(i => $(i).value = ""); $("pick").focus();
+});
+
+$("rows").addEventListener("change", e => {
+  const id = +e.target.dataset.id; if (!id) return;
+  bets.find(b => b.id === id).status = e.target.value; save(); render();
+});
+$("rows").addEventListener("click", e => {
+  const id = +e.target.dataset.del; if (!id) return;
+  if (confirm("Delete this bet?")) { bets = bets.filter(b => b.id !== id); save(); render(); }
+});
+document.querySelectorAll("[data-f]").forEach(btn => btn.addEventListener("click", () => {
+  filter = btn.dataset.f;
+  document.querySelectorAll("[data-f]").forEach(x => x.setAttribute("aria-pressed", x === btn));
+  render();
+}));
+$("cur").addEventListener("input", e => { cur = e.target.value || "£"; save(); render(); });
+
+function download(name, text, type) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+$("json").onclick = () => download("bet-ledger-backup.json", JSON.stringify({ bets, cur }, null, 2), "application/json");
+$("csv").onclick = () => {
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = [["Date", "Sport", "League", "Pick", "Odds", "Stake", "Bookmaker", "Status", "Profit"],
+    ...bets.map(b => [b.date, b.sport, b.league || "", b.pick, b.odds.toFixed(2), b.stake, b.book, b.status, profit(b).toFixed(2)])];
+  download("bets.csv", rows.map(r => r.map(q).join(",")).join("\n"), "text/csv");
+};
+$("imp").onclick = () => $("file").click();
+$("file").onchange = async e => {
+  try {
+    const d = JSON.parse(await e.target.files[0].text());
+    if (!Array.isArray(d.bets)) throw 0;
+    if (confirm(`Replace current data with ${d.bets.length} bets from the backup?`)) { bets = d.bets; cur = d.cur || cur; $("cur").value = cur; save(); render(); }
+  } catch (err) { alert("That file isn't a valid Bet Ledger backup."); }
+  e.target.value = "";
+};
+async function loadFixtures() {
+  try {
+    const r = await fetch("fixtures.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    if (!Array.isArray(d.games)) throw new Error("bad file");
+    GAMES = d.games.map(g => ({ ...g, name: USFMT.has(g.sport) ? `${g.a} @ ${g.h}` : `${g.h} v ${g.a}` }));
+    fixturesUpdated = d.updated || null; fixturesError = "";
+  } catch (e) {
+    GAMES = []; fixturesError = "Couldn't load fixtures.json. Make sure it is in the same folder as index.html and that the page is served from GitHub Pages (opening the file directly won't work).";
+  }
+  renderGames();
+}
+render();
+loadFixtures();
+</script>
+</body>
+</html>
